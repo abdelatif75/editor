@@ -9,7 +9,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { AiOutlinePlus, AiTwotoneDelete } from 'react-icons/ai'
-//import { trpc } from '@/utils/client'
 
 export default async function page() {
   const data = await prisma.productCategory.findMany({
@@ -17,7 +16,11 @@ export default async function page() {
       tier: 1,
     },
     include: {
-      productCategory: true,
+      productCategory: {
+        include: {
+          productCategory: true,
+        },
+      },
     },
   })
 
@@ -33,26 +36,7 @@ export default async function page() {
           <DialogHeader>
             <DialogTitle>add super category</DialogTitle>
           </DialogHeader>
-          <form action={AddCategory} className='flex gap-2'>
-            <input
-              type='text'
-              placeholder='Type here'
-              className='input input-bordered input-primary w-full max-w-xs'
-              name='name'
-              required
-            />
-            <input
-              type='text'
-              placeholder='Type here'
-              className='input input-bordered input-primary w-full max-w-xs'
-              name='tier'
-              value='1'
-              hidden
-            />
-            <button type='submit' className='btn btn-primary btn-outline'>
-              add
-            </button>
-          </form>
+          <FormAddCategory id='null' tier='1' />
         </DialogContent>
       </Dialog>
 
@@ -86,36 +70,7 @@ export default async function page() {
                         <DialogHeader>
                           <DialogTitle>add super category</DialogTitle>
                         </DialogHeader>
-                        <form action={AddCategory} className='flex gap-2'>
-                          <input
-                            type='text'
-                            placeholder='Type here'
-                            className='input input-bordered input-primary w-full max-w-xs'
-                            name='name'
-                            required
-                          />
-                          <input
-                            type='text'
-                            placeholder='Type here'
-                            className='input input-bordered input-primary w-full max-w-xs'
-                            name='tier'
-                            value='2'
-                            hidden
-                          />
-                          <input
-                            type='text'
-                            placeholder='Type here'
-                            className='input input-bordered input-primary w-full max-w-xs'
-                            name='id'
-                            value={i.id}
-                            hidden
-                          />
-                          <button
-                            type='submit'
-                            className='btn btn-primary btn-outline'>
-                            add
-                          </button>
-                        </form>
+                        <FormAddCategory id={i.id} tier='2' />
                       </DialogContent>
                     </Dialog>
                   </section>
@@ -130,19 +85,21 @@ export default async function page() {
                             </div>
                             <div className='collapse-content'>
                               <section className='flex items-center'>
-                                <div>
-                                  <form action={DeleteCategory}>
-                                    <input
-                                      type='text'
-                                      hidden
-                                      name='id'
-                                      value={i.id}
-                                    />
-                                    <button type='submit'>
-                                      <AiTwotoneDelete />
-                                    </button>
-                                  </form>
-                                </div>
+                                {i.productCategory.length == 0 ? (
+                                  <div>
+                                    <form action={DeleteCategory}>
+                                      <input
+                                        type='text'
+                                        hidden
+                                        name='id'
+                                        value={i.id}
+                                      />
+                                      <button type='submit'>
+                                        <AiTwotoneDelete />
+                                      </button>
+                                    </form>
+                                  </div>
+                                ) : undefined}
                                 <Dialog>
                                   <DialogTrigger>
                                     <AiOutlinePlus />
@@ -153,43 +110,34 @@ export default async function page() {
                                         add super category
                                       </DialogTitle>
                                     </DialogHeader>
-                                    <form
-                                      action={AddCategory}
-                                      className='flex gap-2'>
-                                      <input
-                                        type='text'
-                                        placeholder='Type here'
-                                        className='input input-bordered input-primary w-full max-w-xs'
-                                        name='name'
-                                        required
-                                      />
-                                      <input
-                                        type='text'
-                                        placeholder='Type here'
-                                        className='input input-bordered input-primary w-full max-w-xs'
-                                        name='tier'
-                                        value='2'
-                                        hidden
-                                      />
-                                      <input
-                                        type='text'
-                                        placeholder='Type here'
-                                        className='input input-bordered input-primary w-full max-w-xs'
-                                        name='id'
-                                        value={i.id}
-                                        hidden
-                                      />
-                                      <button
-                                        type='submit'
-                                        className='btn btn-primary btn-outline'>
-                                        add
-                                      </button>
-                                    </form>
+                                    <FormAddCategory id={i.id} tier='3' />
                                   </DialogContent>
                                 </Dialog>
                               </section>
-
-                              <Sub3categories id={i.id} />
+                              <ul>
+                                <Fragment>
+                                  {i.productCategory.map((i, index) => (
+                                    <Fragment key={index}>
+                                      <li className='flex items-center gap-4'>
+                                        <span>
+                                          <form action={DeleteCategory}>
+                                            <input
+                                              type='text'
+                                              hidden
+                                              name='id'
+                                              value={i.id}
+                                            />
+                                            <button type='submit'>
+                                              <AiTwotoneDelete />
+                                            </button>
+                                          </form>
+                                        </span>
+                                        {i.name}
+                                      </li>
+                                    </Fragment>
+                                  ))}
+                                </Fragment>
+                              </ul>
                             </div>
                           </div>
                         </li>
@@ -206,36 +154,37 @@ export default async function page() {
   )
 }
 
-function Sub3categories({ id }: { id: string }) {
-  async function sub(id: string) {
-    return await prisma.productCategory.findMany({
-      where: {
-        parentCategoryId: id,
-      },
-    })
-  }
-
+function FormAddCategory({ tier, id }: { tier: string; id: string }) {
   return (
-    <ul>
-      {sub(id).then((i) => (
-        <Fragment>
-          {i.map((i, index) => (
-            <Fragment key={index}>
-              <li className='flex items-center gap-4'>
-                <span>
-                  <form action={DeleteCategory}>
-                    <input type='text' hidden name='id' value={i.id} />
-                    <button type='submit'>
-                      <AiTwotoneDelete />
-                    </button>
-                  </form>
-                </span>
-                {i.name}
-              </li>
-            </Fragment>
-          ))}
-        </Fragment>
-      ))}
-    </ul>
+    <>
+      <form action={AddCategory} className='flex gap-2'>
+        <input
+          type='text'
+          placeholder='Type here'
+          className='input input-bordered input-primary w-full max-w-xs'
+          name='name'
+          required
+        />
+        <input
+          type='text'
+          placeholder='Type here'
+          className='input input-bordered input-primary w-full max-w-xs'
+          name='tier'
+          value={tier}
+          hidden
+        />
+        <input
+          type='text'
+          placeholder='Type here'
+          className='input input-bordered input-primary w-full max-w-xs'
+          name='id'
+          value={id}
+          hidden
+        />
+        <button type='submit' className='btn btn-primary btn-outline'>
+          add
+        </button>
+      </form>
+    </>
   )
 }

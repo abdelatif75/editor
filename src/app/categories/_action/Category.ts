@@ -9,7 +9,8 @@ export async function AddCategory(formData: FormData) {
       data: {
         name: formData.get("name") as string,
         tier: Number(formData.get("tier")),
-        parentCategoryId: formData.get("id") as string | null,
+        parentCategoryId:
+          formData.get("id") == "null" ? null : (formData.get("id") as string),
       },
     })
   } catch (error) {
