@@ -1,0 +1,26 @@
+{
+  "semi": false,
+
+  "overrides": [
+    {
+      "files": ["src/**/*.js", "src/**/*.tsx", "prisma/**/*.prisma"],
+      "options": {
+        "jsxSingleQuote": true,
+        "singleQuote": true,
+        "tabWidth": 2,
+        "bracketSpacing": true,
+        "bracketSameLine": true,
+        "arrowParens": "always"
+      }
+    },
+    {
+      "files": ["src/**/*.css"],
+      "options": {
+        "semi": true,
+        "tabWidth": 4
+      }
+    }
+  ],
+
+  "plugins": ["prettier-plugin-tailwindcss"]
+}
