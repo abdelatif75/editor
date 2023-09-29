@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db'
-import { revalidatePath } from 'next/cache'
 import { Fragment } from 'react'
+import { AddCategory } from './_action/addCategory'
 
 export default async function page() {
   const data = await prisma.productCategory.findMany({
@@ -11,31 +11,6 @@ export default async function page() {
       productCategory: true,
     },
   })
-
-  async function sub(id: string) {
-    return await prisma.productCategory.findMany({
-      where: {
-        parentCategoryId: id,
-      },
-    })
-  }
-
-  async function AddCategory(formData: FormData) {
-    'use server'
-
-    try {
-      await prisma.productCategory.create({
-        data: {
-          name: formData.get('name') as string,
-          tier: Number(formData.get('tier')),
-          parentCategoryId: formData.get('id') as string | null,
-        },
-      })
-    } catch (error) {
-      console.log(error)
-    }
-    revalidatePath('/categories')
-  }
 
   return (
     <div>
@@ -97,17 +72,7 @@ export default async function page() {
                   <Fragment key={index}>
                     <li>
                       <div>{i.name}</div>
-                      <ul>
-                        {sub(i.id).then((i) => (
-                          <Fragment>
-                            {i.map((i, index) => (
-                              <Fragment key={index}>
-                                <li>{i.name}</li>
-                              </Fragment>
-                            ))}
-                          </Fragment>
-                        ))}
-                      </ul>
+                      <Sub3categories id={i.id} />
                     </li>
                   </Fragment>
                 ))}
@@ -117,5 +82,29 @@ export default async function page() {
         ))}
       </ul>
     </div>
+  )
+}
+
+function Sub3categories({ id }: { id: string }) {
+  async function sub(id: string) {
+    return await prisma.productCategory.findMany({
+      where: {
+        parentCategoryId: id,
+      },
+    })
+  }
+
+  return (
+    <ul>
+      {sub(id).then((i) => (
+        <Fragment>
+          {i.map((i, index) => (
+            <Fragment key={index}>
+              <li>{i.name}</li>
+            </Fragment>
+          ))}
+        </Fragment>
+      ))}
+    </ul>
   )
 }
