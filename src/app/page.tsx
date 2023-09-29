@@ -1,8 +1,3 @@
-
 export default function Home() {
-  return (
-    <main className="">
-      y
-    </main>
-  )
+  return <main className=''>y</main>
 }
