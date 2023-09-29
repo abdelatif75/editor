@@ -24,10 +24,14 @@ export async function addNewProduct(formData: FormData) {
           productColor: {
             create: {
               color: formData.get("color") as string,
-              productImg: {
+              productImageGroup: {
                 create: {
-                  title: formData.get("name") as string,
-                  imageFullPath: snapshot.metadata.fullPath,
+                  productImg: {
+                    create: {
+                      title: formData.get("name") as string,
+                      imageFullPath: snapshot.metadata.fullPath,
+                    },
+                  },
                 },
               },
             },
@@ -58,10 +62,14 @@ export async function addColorProduct(formData: FormData) {
         data: {
           color: formData.get("color") as string,
           productId: formData.get("id") as string,
-          productImg: {
+          productImageGroup: {
             create: {
-              title: formData.get("name") as string,
-              imageFullPath: snapshot.metadata.fullPath,
+              productImg: {
+                create: {
+                  title: formData.get("name") as string,
+                  imageFullPath: snapshot.metadata.fullPath,
+                },
+              },
             },
           },
         },

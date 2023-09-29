@@ -10,7 +10,11 @@ export default async function page() {
     include: {
       productColor: {
         include: {
-          productImg: true,
+          productImageGroup: {
+            include: {
+              productImg: true,
+            },
+          },
         },
       },
     },
@@ -34,28 +38,29 @@ export default async function page() {
                     <p style={{ backgroundColor: color.color }}>
                       {color.color}
                     </p>
-                    {color.productImg.map((imageProduct, index) => {
-                      const storageRef = ref(
-                        storage,
-                        imageProduct.imageFullPath,
-                      )
-                      return (
-                        <Fragment key={index}>
-                          {getDownloadURL(storageRef).then((url) => {
+                    {color.productImageGroup.map((images, index) => (
+                      <Fragment key={index}>
+                        <ul>
+                          {images.productImg.map((image, index) => {
+                            const i = ref(storage, image.imageFullPath)
                             return (
-                              <Fragment>
-                                <Image
-                                  alt=''
-                                  src={url}
-                                  width={200}
-                                  height={300}
-                                />
+                              <Fragment key={index}>
+                                {getDownloadURL(i).then((url) => (
+                                  <li>
+                                    <Image
+                                      alt=''
+                                      src={url}
+                                      height={300}
+                                      width={200}
+                                    />
+                                  </li>
+                                ))}
                               </Fragment>
                             )
                           })}
-                        </Fragment>
-                      )
-                    })}
+                        </ul>
+                      </Fragment>
+                    ))}
                   </li>
                 </Fragment>
               ))}
