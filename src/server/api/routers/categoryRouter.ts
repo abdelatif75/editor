@@ -4,9 +4,6 @@ import { createTRPCRouter, publicProcedure } from "@/server/trpc"
 
 export const CategoriesRouter = createTRPCRouter({
   GetAllCategories: publicProcedure.query(async () => {
-    
-
     return true
   }),
-  
 })

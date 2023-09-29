@@ -15,7 +15,7 @@ model ProductCategory {
   name             String
   description      String?           @db.Text
   tier             Int               @default(1)
-  parentCategoryId String
+  parentCategoryId String?
   parentCategory   ProductCategory?  @relation("ProductCategoryToProductCategory", fields: [parentCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   productCategory  ProductCategory[] @relation("ProductCategoryToProductCategory")
 
