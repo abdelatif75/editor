@@ -10,6 +10,10 @@ export const links = [
     link: '/categories',
     name: 'categories',
   },
+  {
+    link: '/products',
+    name: 'products',
+  },
 ]
 
 export default function slideBar({ children }: { children: React.ReactNode }) {

@@ -24,8 +24,6 @@ export default async function page() {
     },
   })
 
-  //const deleteCategory = trpc.DeleteCategory.useMutation()
-
   return (
     <div className='m-auto w-1/2 '>
       <Dialog>
