@@ -2,7 +2,7 @@ import Provider from '@/utils/Provider'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { SladeBar } from '@/components'
+import { Navbar, SladeBar } from '@/components'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,7 +20,10 @@ export default function RootLayout({
     <html lang='en' data-theme='dark'>
       <body className={inter.className}>
         <Provider>
-          <SladeBar>{children}</SladeBar>
+          <section className='container'>
+            <Navbar />
+            <SladeBar>{children}</SladeBar>
+          </section>
         </Provider>
       </body>
     </html>
