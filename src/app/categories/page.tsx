@@ -34,7 +34,7 @@ export default async function page() {
           add
         </button>
       </form>
-      <ul className='menu min-h-full w-80 bg-base-200 p-4 text-base-content'>
+      <ul>
         {data.map((i, index) => (
           <Fragment key={index}>
             <li>

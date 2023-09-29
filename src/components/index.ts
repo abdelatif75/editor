@@ -1,1 +1,1 @@
-export {default as CategoryPage} from '@/components/categoryPage'
+export { default as SladeBar } from "@/components/slideBar"
