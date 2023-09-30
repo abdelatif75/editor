@@ -12,7 +12,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       links: [
         httpBatchLink({
           url: 'https://3001-cs-44762383937-default.cs-europe-west1-xedi.cloudshell.dev/api/trpc',
-          url: 'http://localhost:3000/api/trpc',
+          //url: 'http://localhost:3000/api/trpc',
         }),
       ],
     }),
