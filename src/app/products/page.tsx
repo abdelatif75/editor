@@ -30,7 +30,7 @@ export default async function page() {
       <section>
         {data.map((product, index) => (
           <Fragment key={index}>
-            <div>{product.title}</div>{' '}
+            <div className='text-xl font-bold'>{product.title}</div>
             <ul>
               {product.productColor.map((color, index) => (
                 <Fragment key={index}>
